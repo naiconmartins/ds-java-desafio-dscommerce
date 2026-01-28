@@ -1,6 +1,7 @@
 package com.devsuperior.dscommerce.services;
 
 import com.devsuperior.dscommerce.dto.ProductDTO;
+import com.devsuperior.dscommerce.dto.ProductMinDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
@@ -28,13 +29,13 @@ public class ProductService {
 
     }
 
-    @Transactional(readOnly = true) //somente leitura ou consulta
-    public Page<ProductDTO> findAll(Pageable pageable) {
+    @Transactional(readOnly = true)
+    public Page<ProductMinDTO> findAll(Pageable pageable) {
         Page<Product> result =  repository.findAll(pageable);
-        return result.map(x -> new ProductDTO(x));
+        return result.map(x -> new ProductMinDTO(x));
     }
 
-    @Transactional //sem readonly, pois é de inserção
+    @Transactional
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
         copyDtoToEntity(dto, entity);
@@ -46,7 +47,6 @@ public class ProductService {
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
         try {
-            //getReferenceById prepara o objeto para update, não realiza a pre busca no banco de dados
             Product entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
             entity = repository.save(entity);
@@ -66,7 +66,6 @@ public class ProductService {
         try {
             repository.deleteById(id);
         } catch(DataIntegrityViolationException e) {
-            //DataIntegrityViolationException indica que um recurso não pode ser deletado por violar a integridade referencial (está vinculado a outro registro)
             throw new DatabaseException("Falha de integridade referencial");
         }
     }
