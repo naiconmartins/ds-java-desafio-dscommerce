@@ -40,7 +40,7 @@ public class ProductController {
         dto = service.insert(dto);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(dto.getId()).toUri(); // boa pratica. Cria link do recursos nos headers da resposta
+                .buildAndExpand(dto.getId()).toUri();
 
         return ResponseEntity.created(uri).body(dto);
     }
