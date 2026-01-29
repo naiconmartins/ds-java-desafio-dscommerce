@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
 
-@ControllerAdvice // define tratamento global para exceções específicas
+@ControllerAdvice
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
